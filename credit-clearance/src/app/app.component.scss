@@ -1,0 +1,18 @@
+.app {
+    padding: 2rem 16rem;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 1024px) {
+    .app {
+        padding: 2rem 6rem;
+    }
+}
+
+
+@media (max-width: 680px) {
+    .app {
+        padding: 2rem;
+    }
+}

@@ -1,0 +1,42 @@
+<mat-progress-bar mode="indeterminate" class="loader" *ngIf="(loadingSubmit$ | async) || (loadingCreditType$ | async)"></mat-progress-bar>
+<ng-container
+  *ngIf="{creditTypes: creditTypes$ | async, loadingCreditTypes: loadingCreditType$ | async, loadingSubmit: loadingSubmit$ | async} as obs">
+  <div class="flex-container" [formGroup]="formGroup">
+    <h1>Bem vindo! Que tipo de crédito você deseja contratar?</h1>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-select formControlName="creditType">
+        <mat-option [disabled]="true" [value]="0">Selecione o tipo de crédito</mat-option>
+        <mat-option *ngFor="let creditType of obs.creditTypes" [value]="creditType.id">
+          Crédito {{creditType.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <ng-container *ngIf="showForm">
+      <h3>Insira os valores abaixo para analisarmos as condições!</h3>
+      <mat-form-field appearance="outline" floatLabel="always" class="full-width">
+        <mat-label>Valor do crédito</mat-label>
+        <input matInput formControlName="amount" type="number" placeholder="0">
+        <span matTextPrefix>R$&nbsp;</span>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always" class="full-width">
+        <mat-label>Numero de parcelas</mat-label>
+        <input matInput formControlName="numberOfInstallments" type="number" placeholder="0">
+        <mat-hint>O número de parcelas deve ser entre 5 e 72</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always" class="full-width">
+        <mat-label>Data para a primeira parcela</mat-label>
+        <input matInput formControlName="firstDueDate" [min]="minDate" [max]="maxDate" [matDatepicker]="picker">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-hint>O dia do primeiro pagamento deve ser entre 15 a 40 dias</mat-hint>
+      </mat-form-field>
+
+      <button mat-flat-button [disabled]="formGroup.invalid || obs.loadingSubmit" (click)="submit()" class="submit-button">Analisar
+        crédito</button>
+    </ng-container>
+  </div>
+</ng-container>

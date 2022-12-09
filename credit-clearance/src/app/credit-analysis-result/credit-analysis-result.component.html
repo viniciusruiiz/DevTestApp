@@ -1,0 +1,14 @@
+<div class="flex-container">
+    <ng-container *ngIf="data.approved; else notApproved">
+        <h2>Parabens, você foi aprovado!</h2>
+        <p>Valor contratado: R${{ (data.totalAmount - data.interestAmount).toFixed(2) }}</p>
+        <p>Valor total a pagar: R${{ data.totalAmount.toFixed(2) }}</p>
+        <p>Valor dos juros: R${{ data.interestAmount.toFixed(2) }}</p>
+    </ng-container>
+    
+    <button mat-flat-button (click)="returnToAnalysisForm()">Faça uma nova análise</button>
+    
+    <ng-template #notApproved>
+        <h2>Por enquanto, não temos nenhuma opção de crédito para você.</h2>
+    </ng-template>
+</div>
