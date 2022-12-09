@@ -35,9 +35,16 @@ export class CreditAnalysisFormComponent implements OnInit, OnDestroy {
   }
 
   constructor(private creditService: CreditService, private router: Router, private snackBar: MatSnackBar) {
-    this.creditService.getAllCreditTypes().pipe(takeUntil(this.unsubscribe$), delay(500)).subscribe(creditTypes => {
-      this.creditTypes$.next(creditTypes);
-      this.loadingCreditType$.next(false);
+    this.creditService.getAllCreditTypes().pipe(takeUntil(this.unsubscribe$), delay(500)).subscribe({
+      next: creditTypes => {
+        this.creditTypes$.next(creditTypes);
+        this.loadingCreditType$.next(false);
+      },
+      error: (err) => {
+        this.loadingCreditType$.next(false);
+        console.error('ERROR: ', err);
+        this.snackBar.open("Ocorreu um erro ao carregar os tipos de crédito. Tente novamente mais tarde.", undefined, { duration: 5000 })
+      }
     });
 
     this.minDate = new Date();
@@ -64,7 +71,7 @@ export class CreditAnalysisFormComponent implements OnInit, OnDestroy {
           this.loadingSubmit$.next(false);
           this.creditService.creditAnalysisResult = response;
           this.router.navigateByUrl('result')
-        }, 
+        },
         error: (err) => {
           this.loadingSubmit$.next(false);
           console.error('ERROR: ', err);
